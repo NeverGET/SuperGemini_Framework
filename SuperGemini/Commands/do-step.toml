@@ -1,0 +1,15 @@
+# .gemini/commands/do-step.toml
+name = "do-step"
+description = "Verilen görevi atomik adımlara böler ve her seferinde BİR adım yapar."
+
+prompt = """
+TASK: {{args}}
+
+STRATEGY:
+1. Break this task into small, atomic implementation steps (e.g., "Create file X", "Update function Y").
+2. Execute ONLY the FIRST step from your list using available tools.
+3. Report the result.
+4. Ask me: "Shall I proceed to the next step?"
+
+DO NOT try to do all steps at once. One step per turn.
+"""

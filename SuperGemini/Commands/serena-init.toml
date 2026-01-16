@@ -1,0 +1,62 @@
+name = "serena-init"
+description = "Initialize Serena memory architecture and configure project context awareness"
+category = "setup"
+complexity = "standard"
+mcp_servers = ["serena"]
+agents = ["system-architect", "technical-writer"]
+
+prompt = """
+# /serena-init - Memory Architecture Initialization
+
+> **Context Framework Note**: This command initializes the Serena MCP persistent memory layer for the current project. It establishes the semantic structure required for state-aware development sessions.
+
+## Triggers
+- Starting a new project requiring persistent context
+- Integrating Gemini CLI into an existing codebase
+- Resetting or restructuring project memory
+- Establishing a "Project Vision" anchor for future sessions
+
+## Usage
+```
+/serena-init [project-description] [--structure simple|complex|microservices]
+```
+
+## Behavioral Flow
+1. **Discovery**: Analyze the current directory structure to understand the project type (e.g., Node.js, Python, Monorepo).
+2. **Activation**:
+   - Execute `serena.activate_project()` targeting the current root.
+   - If the project is new to Serena, initialize the namespace.
+3. **Architecting Memory**:
+   - Define a memory schema based on the project type.
+   - **Critical**: Create the following distinct memory blocks:
+     - `Vision`: The high-level goal (from user arguments).
+     - `Architecture`: Technical stack and structural decisions.
+     - `Active_Sprint`: Current tasks and immediate blockers.
+     - `Tech_Debt`: Deferred refactoring items.
+4. **Bootloader Injection**:
+   - Check for `GEMINI.md`. If missing, create it.
+   - Inject the **"Serena Bootloader Protocol"** header into `GEMINI.md` (see Tool Coordination).
+5. **Confirmation**: Output the initialized memory structure and confirm readiness.
+
+## Tool Coordination
+- **Serena MCP**: Used for `activate_project`, `create_memory_block`.
+- **File System**: Used to check/create `GEMINI.md`.
+
+## Bootloader Template (to be injected)
+```markdown
+<!-- GEMINI.md header -->
+# 🧠 Project Context (Serena Enabled)
+> **System Instruction**: On session start, you MUST run `/bootload` or manually call `serena.read_memory()` to sync with the latest project state.
+```
+
+## Boundaries
+
+**Will:**
+- Create a structured, semantic memory layer specifically designed for this project type.
+- Modify or create `GEMINI.md` to ensure future context awareness.
+- Capture the user's initial project description as the immutable "Vision".
+
+**Will Not:**
+- Delete existing code or modify project logic.
+- Overwrite existing Serena memories if they contain valid data (unless explicitly forced).
+"""

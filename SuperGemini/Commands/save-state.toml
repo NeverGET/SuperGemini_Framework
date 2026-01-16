@@ -1,0 +1,56 @@
+name = "save-state"
+description = "Crystalize current session progress into structured Serena memory blocks"
+category = "workflow"
+complexity = "standard"
+mcp_servers = ["serena"]
+agents = ["technical-writer", "project-manager"]
+
+prompt = """
+# /save-state - Session Persistence & Memory Update
+
+## Triggers
+- Conclusion of a development session
+- Completion of a specific task or sub-task
+- Major architectural decision changes
+- Hand-off between different agents or sessions
+
+## Usage
+```
+/save-state [summary-note] [--commit]
+```
+
+## Behavioral Flow
+1. **Analyze Session**: Review the immediate conversation history and file modifications made during this turn.
+2. **Categorize**: Break down the activities into:
+   - **Completed**: Atomic tasks finished (e.g., "Created Login Component").
+   - **In-Progress**: Tasks started but not verified.
+   - **Decisions**: Technical choices made (e.g., "Switched to Tailwind CSS").
+3. **Update Memory**:
+   - Update `Active_Sprint` with new status.
+   - Append to `Dev_Log` with timestamp.
+   - If architectural changes occurred, patch the `Architecture` memory block.
+4. **Next Actions**: define the precise `entry_point` for the next session (e.g., "Next session should start by writing unit tests for X").
+5. **Confirm**: Call `serena.update_memory()` and confirm the saved state to the user.
+
+## Data Structure Goal
+The goal is to save memory in a format that allows `/bootload` to instantly restore context.
+Example Memory Update:
+```json
+{
+  "status": "in-progress",
+  "last_file": "src/auth/config.ts",
+  "next_step": "Implement error handling for OAuth callback"
+}
+```
+
+## Boundaries
+
+**Will:**
+- Summarize technical details accurately.
+- Update multiple memory blocks if the session touched different domains.
+- Suggest a git commit message (if `--commit` is implied or requested).
+
+**Will Not:**
+- Execute git commands unless explicitly instructed.
+- Hallucinate tasks that were not discussed or executed in the session.
+"""

@@ -1,0 +1,62 @@
+name = "bootload"
+description = "Intelligently hydrate project context from Serena memory and selective file reading"
+category = "orchestration"
+complexity = "advanced"
+mcp_servers = ["serena", "context7", "sequential"]
+agents = ["project-manager", "system-architect"]
+
+prompt = """
+# /bootload - Intelligent Context Hydration
+
+## Triggers
+- Start of a new development session
+- Switching context between different modules of the project
+- Resuming work after a break
+- Verifying alignment between "Plan" (Memory) and "Reality" (Files)
+
+## Usage
+```
+/bootload [focus-area] [--force-sync]
+```
+
+## Behavioral Flow
+1. **Connect**: Establish connection with Serena MCP (`activate_project`).
+2. **Recall**:
+   - Retrieve `Active_Sprint` and `Architecture` memory blocks.
+   - Identify the "Last Known State" and "Pending Tasks".
+3. **Pivot Check (Crucial)**:
+   - Compare the user's `focus-area` argument against the `Active_Sprint` memory.
+   - **IF** the user asks for feature Y, but memory says we were building feature X:
+     - **STOP** and ask: "Memory indicates we were working on X. Are we pivoting to Y? Should I archive X?"
+4. **Hydrate**:
+   - Based on the confirmed focus, identify relevant files using `glob` or `git ls-files`.
+   - Read **only** the headers/interfaces of related files first (Token Efficiency).
+   - Read full content of the specific file being edited.
+5. **Synthesize**:
+   - Output a "Session Briefing": Current Goal, Loaded Context, and Immediate Next Step.
+
+## Examples
+
+### Resuming Work
+```
+/bootload
+# Output: "Welcome back. We are 60% through the 'Auth' module. I've loaded 'auth.ts' and 'user_model.ts'. Ready to continue implementation of the login function."
+```
+
+### Context Switch (Pivot)
+```
+/bootload "Landing Page Styles"
+# Output: "⚠️ Context Pivot Detected. Memory shows we are deep in 'Database Migration'. Do you want to pause that and switch context to Frontend/Styles?"
+```
+
+## Boundaries
+
+**Will:**
+- Prioritize memory state to maintain continuity.
+- Load minimal necessary file context to save tokens.
+- Warn the user about context switching costs.
+
+**Will Not:**
+- Modify any files during the loading phase.
+- Load the entire project codebase into context (avoids token overflow).
+"""

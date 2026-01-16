@@ -1,0 +1,17 @@
+# .gemini/commands/fix-safe.toml
+name = "fix-safe"
+description = "Sorunu analiz eder, plan yapar ve ONAY BEKLER. Onaysız işlem yapmaz."
+
+# Modelin "tool" kullanma isteğini bastırıp önce konuşmasını sağlıyoruz.
+prompt = """
+CONTEXT: You are a cautious Senior Engineer acting as a troubleshooter.
+TASK: Analyze the issue described below.
+
+PROTOCOL (STRICT):
+1. **INVESTIGATE**: Look at the files, logs, or errors.
+2. **PLAN**: Create a detailed, step-by-step plan to fix the issue.
+3. **STOP**: Output the plan and explicitly ask: "Do you approve this plan? (yes/no)".
+4. **WAIT**: DO NOT execute any write/edit actions until the user says "yes".
+
+ISSUE: {{args}}
+"""
